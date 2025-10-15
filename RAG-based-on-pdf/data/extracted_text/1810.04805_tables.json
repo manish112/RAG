@@ -1,0 +1,496 @@
+{
+  "pdf_name": "1810.04805",
+  "tables_count": 21,
+  "tables": [
+    {
+      "page": 3,
+      "table_number": 1,
+      "data": [
+        [
+          "",
+          "",
+          "",
+          "C T ... T T T’\n1 N [SEP] 1",
+          null,
+          null,
+          null,
+          null,
+          null,
+          "",
+          "",
+          "",
+          "T",
+          "’\nM\n’\nM"
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "T’\n1",
+          null,
+          "...",
+          null,
+          null,
+          "’\nM"
+        ],
+        [
+          null,
+          null,
+          null,
+          "BERT BERT",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "",
+          "",
+          null,
+          ""
+        ],
+        [
+          null,
+          null,
+          null,
+          "E[CLS]",
+          "E\n1",
+          "...",
+          "E\nN",
+          "E\n[SEP]",
+          "E’\n1",
+          null,
+          ".",
+          "..",
+          "E",
+          "’\nM"
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "",
+          "",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "",
+          null,
+          ".. Tok",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ".",
+          "..",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "",
+          null,
+          "",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "Paragraph",
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "page": 3,
+      "table_number": 2,
+      "data": [
+        [
+          "T\n1",
+          "..."
+        ]
+      ]
+    },
+    {
+      "page": 3,
+      "table_number": 3,
+      "data": [
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "T ’\nM"
+        ],
+        [
+          "BERT",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          "E[CLS]",
+          "E\n1",
+          "...",
+          "E\nN",
+          "E\n[SEP]",
+          "E’\n1",
+          "...",
+          "E ’\nM"
+        ]
+      ]
+    },
+    {
+      "page": 3,
+      "table_number": 4,
+      "data": [
+        [
+          "T\n1",
+          "..."
+        ]
+      ]
+    },
+    {
+      "page": 3,
+      "table_number": 5,
+      "data": [
+        [
+          "BER",
+          "T B",
+          "ERT"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 1,
+      "data": [
+        [
+          "is",
+          "cute",
+          "[SEP]"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 2,
+      "data": [
+        [
+          "he",
+          "likes",
+          "play"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 3,
+      "data": [
+        [
+          "##ing",
+          "[SEP]"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 4,
+      "data": [
+        [
+          "E\nis",
+          "E\ncute",
+          "E\n[SEP]"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 5,
+      "data": [
+        [
+          "E\nhe",
+          "E\nlikes",
+          "E\nplay"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 6,
+      "data": [
+        [
+          "E\n##ing",
+          "E\n[SEP]"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 7,
+      "data": [
+        [
+          "E\n3",
+          "E\n4",
+          "E\n5"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 8,
+      "data": [
+        [
+          "E\n6",
+          "E\n7",
+          "E\n8"
+        ]
+      ]
+    },
+    {
+      "page": 5,
+      "table_number": 9,
+      "data": [
+        [
+          "E\n9",
+          "E\n10"
+        ]
+      ]
+    },
+    {
+      "page": 13,
+      "table_number": 1,
+      "data": [
+        [
+          "BERT (Ours) OpenAI GPT ELMo\nT1 T2 ... TN T1 T2 ... TN T1 T2 ... TN\nTrm Trm ... Trm Trm Trm ... Trm\nLstm Lstm ... Lstm Lstm Lstm ... Lstm\nTrm Trm ... Trm Trm Trm ... Trm\nLstm Lstm ... Lstm Lstm Lstm ... Lstm\nE1 E2 ... EN E1 E2 ... EN E1 E2 ... EN",
+          "ELMo\nT1 T2 ... TN\nLstm Lstm ... Lstm Lstm Lstm ... Lstm\nLstm Lstm ... Lstm Lstm Lstm ... Lstm\nE1 E2 ... EN"
+        ]
+      ]
+    },
+    {
+      "page": 13,
+      "table_number": 2,
+      "data": [
+        [
+          "T2"
+        ],
+        [
+          ""
+        ]
+      ]
+    },
+    {
+      "page": 13,
+      "table_number": 3,
+      "data": [
+        [
+          "...",
+          null,
+          null
+        ],
+        [
+          null,
+          "",
+          ""
+        ],
+        [
+          "E1",
+          null,
+          "E2"
+        ]
+      ]
+    },
+    {
+      "page": 15,
+      "table_number": 1,
+      "data": [
+        [
+          "C",
+          "T ...\n1",
+          "T T\nN [SEP]"
+        ],
+        [
+          "BERT",
+          null,
+          null
+        ],
+        [
+          "E[CLS]",
+          "E ...\n1",
+          null
+        ]
+      ]
+    },
+    {
+      "page": 15,
+      "table_number": 2,
+      "data": [
+        [
+          "T T\n1 2",
+          "...",
+          "T\nN"
+        ],
+        [
+          "BERT",
+          null,
+          null
+        ],
+        [
+          "E E\n1 2",
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "page": 15,
+      "table_number": 3,
+      "data": [
+        [
+          "C",
+          "T ...\n1",
+          "T T\nN [SEP]"
+        ],
+        [
+          "BERT",
+          null,
+          null
+        ],
+        [
+          "E[CLS]",
+          "E ...\n1",
+          null
+        ]
+      ]
+    },
+    {
+      "page": 16,
+      "table_number": 1,
+      "data": [
+        [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          null,
+          null,
+          "BER",
+          "TBASE(Mas",
+          "kedLM)"
+        ],
+        [
+          "",
+          "",
+          "",
+          "TBASE(Left",
+          "-to-Right)"
+        ]
+      ]
+    }
+  ]
+}
