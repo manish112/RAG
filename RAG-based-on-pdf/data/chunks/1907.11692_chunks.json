@@ -1,0 +1,801 @@
+{
+  "pdf_name": "1907.11692",
+  "method": "semantic_recursive",
+  "chunk_size": 1000,
+  "chunk_overlap": 200,
+  "total_chunks": 66,
+  "chunks": [
+    {
+      "chunk_id": 1,
+      "text": "9\n1\n0\n2\n\nl\nu\nJ\n\n6\n2\n\n]\nL\nC\n.\ns\nc\n[\n\n1\nv\n2\n9\n6\n1\n1\n.\n7\n0\n9\n1\n:\nv\ni\nX\nr\na\n\nRoBERTa: A Robustly Optimized BERT Pretraining Approach\n\nYinhan Liu∗§ Myle Ott∗§ Naman Goyal∗§\n\nJingfei Du∗§ Mandar Joshi†\n\nDanqi Chen§ Omer Levy§ Mike Lewis§ Luke Zettlemoyer†§ Veselin Stoyanov§\n\n† Paul G. Allen School of Computer Science & Engineering,\nUniversity of Washington, Seattle, WA\n{mandar90,lsz}@cs.washington.edu\n§ Facebook AI\n{yinhanliu,myleott,naman,jingfeidu,\ndanqi,omerlevy,mikelewis,lsz,ves}@fb.com\n\nAbstract",
+      "length": 499,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 2,
+      "text": "Abstract\n\nLanguage model pretraining has led to sig-\nniﬁcant performance gains but careful com-\nparison between different approaches is chal-\nlenging. Training is computationally expen-\nsive, often done on private datasets of different\nsizes, and, as we will show, hyperparameter\nchoices have signiﬁcant impact on the ﬁnal re-\nsults. We present a replication study of BERT\npretraining (Devlin et al., 2019) that carefully\nmeasures the impact of many key hyperparam-\neters and training data size. We ﬁnd that BERT\nwas signiﬁcantly undertrained, and can match\nor exceed the performance of every model\npublished after it. Our best model achieves\nstate-of-the-art results on GLUE, RACE and\nSQuAD. These results highlight the impor-\ntance of previously overlooked design choices,\nand raise questions about the source of re-\ncently reported improvements. We release our\nmodels and code.1\n\n1 Introduction\n\nand XLNet",
+      "length": 908,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 3,
+      "text": "1 Introduction\n\nand XLNet\n\nSelf-training methods such as ELMo (Peters et al.,\n2018), BERT\n2018), GPT (Radford et al.,\n(Devlin et al., 2019), XLM (Lample and Conneau,\n2019),\n(Yang et al., 2019) have\nbrought signiﬁcant performance gains, but it can\nbe challenging to determine which aspects of\nthe methods contribute the most. Training is\ncomputationally expensive, limiting the amount\nof tuning that can be done, and is often done with\nprivate training data of varying sizes,\nlimiting\nour ability to measure the effects of the modeling\nadvances.\n\n∗Equal contribution.\n1Our models and code are available at:\n\nhttps://github.com/pytorch/fairseq",
+      "length": 641,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 4,
+      "text": "∗Equal contribution.\n1Our models and code are available at:\n\nhttps://github.com/pytorch/fairseq\n\nWe present a replication study of BERT pre-\ntraining (Devlin et al., 2019), which includes a\ncareful evaluation of the effects of hyperparmeter\ntuning and training set size. We ﬁnd that BERT\nwas signiﬁcantly undertrained and propose an im-\nproved recipe for training BERT models, which\nwe call RoBERTa, that can match or exceed the\nperformance of all of the post-BERT methods.\n(1)\nOur modiﬁcations are simple, they include:\ntraining the model longer, with bigger batches,\nover more data; (2) removing the next sentence\nprediction objective; (3) training on longer se-\nquences; and (4) dynamically changing the mask-\ning pattern applied to the training data. We also\ncollect a large new dataset (CC-NEWS) of compa-\nrable size to other privately used datasets, to better\ncontrol for training set size effects.",
+      "length": 904,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 5,
+      "text": "When controlling for training data, our im-\nproved training procedure improves upon the pub-\nlished BERT results on both GLUE and SQuAD.\nWhen trained for longer over additional data, our\nmodel achieves a score of 88.5 on the public\nGLUE leaderboard, matching the 88.4 reported\nby Yang et al. (2019). Our model establishes a\nnew state-of-the-art on 4/9 of the GLUE tasks:\nMNLI, QNLI, RTE and STS-B. We also match\nstate-of-the-art results on SQuAD and RACE.\nOverall, we re-establish that BERT’s masked lan-\nguage model\ntraining objective is competitive\nwith other recently proposed training objectives\nsuch as perturbed autoregressive language model-\ning (Yang et al., 2019).2\n\nIn summary,\n\nthe contributions of this paper\nare: (1) We present a set of important BERT de-\nsign choices and training strategies and introduce\n\n2It is possible that these other methods could also improve\nwith more tuning. We leave this exploration to future work.",
+      "length": 940,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 6,
+      "text": "2It is possible that these other methods could also improve\nwith more tuning. We leave this exploration to future work.\n\n \n \n \n \n \n \n\falternatives that lead to better downstream task\nperformance; (2) We use a novel dataset, CC-\nNEWS, and conﬁrm that using more data for pre-\ntraining further improves performance on down-\nstream tasks; (3) Our training improvements show\nthat masked language model pretraining, under\nthe right design choices, is competitive with all\nother recently published methods. We release our\nmodel, pretraining and ﬁne-tuning code imple-\nmented in PyTorch (Paszke et al., 2017).\n\n2 Background\n\nIn this section, we give a brief overview of the\nBERT (Devlin et al., 2019) pretraining approach\nand some of the training choices that we will ex-\namine experimentally in the following section.\n\n2.1 Setup\n\n(sequences of",
+      "length": 837,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 7,
+      "text": "2.1 Setup\n\n(sequences of\n\nBERT takes as input a concatenation of two\ntokens), x1, . . . , xN\nsegments\nand y1, . . . , yM .\nSegments usually consist of\nmore than one natural sentence. The two seg-\nments are presented as a single input sequence\nto BERT with special\ntokens delimiting them:\n[CLS ], x1, . . . , xN , [SEP ], y1, . . . , yM , [EOS ].\nM and N are constrained such that M + N < T ,\nwhere T is a parameter that controls the maximum\nsequence length during training.\n\nThe model is ﬁrst pretrained on a large unla-\nbeled text corpus and subsequently ﬁnetuned us-\ning end-task labeled data.\n\n2.2 Architecture\n\nBERT uses the now ubiquitous transformer archi-\ntecture (Vaswani et al., 2017), which we will not\nreview in detail. We use a transformer architecture\nwith L layers. Each block uses A self-attention\nheads and hidden dimension H.\n\n2.3 Training Objectives\n\nDuring pretraining, BERT uses two objectives:\nmasked language modeling and next sentence pre-\ndiction.",
+      "length": 971,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 8,
+      "text": "2.3 Training Objectives\n\nDuring pretraining, BERT uses two objectives:\nmasked language modeling and next sentence pre-\ndiction.\n\nMasked Language Model (MLM) A random\nsample of the tokens in the input sequence is\nselected and replaced with the special\ntoken\n[MASK ]. The MLM objective is a cross-entropy\nloss on predicting the masked tokens. BERT uni-\nformly selects 15% of the input tokens for possi-\nble replacement. Of the selected tokens, 80% are\nreplaced with [MASK ], 10% are left unchanged,\n\nand 10% are replaced by a randomly selected vo-\ncabulary token.\n\nIn the original implementation, random mask-\ning and replacement is performed once in the be-\nginning and saved for the duration of training, al-\nthough in practice, data is duplicated so the mask\nis not always the same for every training sentence\n(see Section 4.1).",
+      "length": 829,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 9,
+      "text": "Next Sentence Prediction (NSP) NSP is a bi-\nnary classiﬁcation loss for predicting whether two\nsegments follow each other in the original text.\nPositive examples are created by taking consecu-\ntive sentences from the text corpus. Negative ex-\namples are created by pairing segments from dif-\nferent documents. Positive and negative examples\nare sampled with equal probability.\n\nThe NSP objective was designed to improve\nperformance on downstream tasks, such as Natural\nLanguage Inference (Bowman et al., 2015), which\nrequire reasoning about the relationships between\npairs of sentences.\n\n2.4 Optimization",
+      "length": 604,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 10,
+      "text": "2.4 Optimization\n\nBERT is optimized with Adam (Kingma and Ba,\n2015) using the following parameters: β1 = 0.9,\nβ2 = 0.999, ǫ = 1e-6 and L2 weight de-\ncay of 0.01. The learning rate is warmed up\nover the ﬁrst 10,000 steps to a peak value of\n1e-4, and then linearly decayed. BERT trains\nwith a dropout of 0.1 on all\nlayers and at-\ntention weights, and a GELU activation func-\ntion (Hendrycks and Gimpel, 2016). Models are\npretrained for S = 1,000,000 updates, with mini-\nbatches containing B = 256 sequences of maxi-\nmum length T = 512 tokens.\n\n2.5 Data\n\nBERT is trained on a combination of BOOKCOR-\nPUS (Zhu et al., 2015) plus English WIKIPEDIA,\nwhich totals 16GB of uncompressed text.3\n\n3 Experimental Setup\n\nIn this section, we describe the experimental setup\nfor our replication study of BERT.\n\n3.1 Implementation\n\nWe reimplement BERT in FAIRSEQ (Ott et al.,\n2019). We primarily follow the original BERT",
+      "length": 904,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 11,
+      "text": "In this section, we describe the experimental setup\nfor our replication study of BERT.\n\n3.1 Implementation\n\nWe reimplement BERT in FAIRSEQ (Ott et al.,\n2019). We primarily follow the original BERT\n\n3Yang et al. (2019) use the same dataset but report having\nonly 13GB of text after data cleaning. This is most likely due\nto subtle differences in cleaning of the Wikipedia data.\n\n\foptimization hyperparameters, given in Section 2,\nexcept for the peak learning rate and number of\nwarmup steps, which are tuned separately for each\nsetting. We additionally found training to be very\nsensitive to the Adam epsilon term, and in some\ncases we obtained better performance or improved\nstability after tuning it. Similarly, we found setting\nβ2 = 0.98 to improve stability when training with\nlarge batch sizes.",
+      "length": 798,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 12,
+      "text": "We pretrain with sequences of at most T = 512\ntokens. Unlike Devlin et al. (2019), we do not ran-\ndomly inject short sequences, and we do not train\nwith a reduced sequence length for the ﬁrst 90% of\nupdates. We train only with full-length sequences.\nWe train with mixed precision ﬂoating point\narithmetic on DGX-1 machines, each with 8 ×\n32GB Nvidia V100 GPUs interconnected by In-\nﬁniband (Micikevicius et al., 2018).\n\n3.2 Data",
+      "length": 428,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 13,
+      "text": "3.2 Data\n\nBERT-style pretraining crucially relies on large\nquantities of text. Baevski et al. (2019) demon-\nstrate that increasing data size can result in im-\nSeveral efforts\nproved end-task performance.\nhave trained on datasets larger and more diverse\nthan the original BERT (Radford et al., 2019;\nYang et al., 2019; Zellers et al., 2019). Unfortu-\nnately, not all of the additional datasets can be\npublicly released. For our study, we focus on gath-\nering as much data as possible for experimenta-\ntion, allowing us to match the overall quality and\nquantity of data as appropriate for each compari-\nson.\n\nWe consider ﬁve English-language corpora of\nvarying sizes and domains, totaling over 160GB\nof uncompressed text. We use the following text\ncorpora:\n\n• BOOKCORPUS (Zhu et al., 2015) plus English\nWIKIPEDIA. This is the original data used to\ntrain BERT. (16GB).",
+      "length": 865,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 14,
+      "text": "• BOOKCORPUS (Zhu et al., 2015) plus English\nWIKIPEDIA. This is the original data used to\ntrain BERT. (16GB).\n\n• CC-NEWS, which we collected from the En-\nthe CommonCrawl News\nglish portion of\ndataset (Nagel, 2016). The data contains 63\nmillion English news articles crawled between\nSeptember 2016 and February 2019. (76GB af-\nter ﬁltering).4\n\n• OPENWEBTEXT (Gokaslan and Cohen, 2019),\nan open-source recreation of the WebText cor-\n\n4We use news-please (Hamborg et al., 2017) to col-\nlect and extract CC-NEWS. CC-NEWS is similar to the RE-\nALNEWS dataset described in Zellers et al. (2019).\n\npus described in Radford et al. (2019). The text\nis web content extracted from URLs shared on\nReddit with at least three upvotes. (38GB).5\n\n• STORIES, a dataset introduced in Trinh and Le\n(2018) containing a subset of CommonCrawl\ndata ﬁltered to match the story-like style of\nWinograd schemas. (31GB).\n\n3.3 Evaluation",
+      "length": 908,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 15,
+      "text": "• STORIES, a dataset introduced in Trinh and Le\n(2018) containing a subset of CommonCrawl\ndata ﬁltered to match the story-like style of\nWinograd schemas. (31GB).\n\n3.3 Evaluation\n\nFollowing previous work, we evaluate our pre-\ntrained models on downstream tasks using the fol-\nlowing three benchmarks.\n\nGLUE The General Language Understand-\ning Evaluation (GLUE) benchmark (Wang et al.,\n2019b) is a collection of 9 datasets for evaluating\nnatural language understanding systems.6 Tasks\nare framed as either single-sentence classiﬁcation\nor sentence-pair classiﬁcation tasks. The GLUE\norganizers provide training and development data\nsplits as well as a submission server and leader-\nboard that allows participants to evaluate and com-\npare their systems on private held-out test data.",
+      "length": 782,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 16,
+      "text": "For the replication study in Section 4, we report\nresults on the development sets after ﬁnetuning\nthe pretrained models on the corresponding single-\ntask training data (i.e., without multi-task training\nor ensembling). Our ﬁnetuning procedure follows\nthe original BERT paper (Devlin et al., 2019).\n\nIn Section 5 we additionally report test set re-\nsults obtained from the public leaderboard. These\nresults depend on a several task-speciﬁc modiﬁca-\ntions, which we describe in Section 5.1.\n\nSQuAD The Stanford Question Answering\nDataset (SQuAD) provides a paragraph of context\nand a question. The task is to answer the question\nby extracting the relevant span from the context.\nWe evaluate on two versions of SQuAD: V1.1\nand V2.0 (Rajpurkar et al., 2016, 2018). In V1.1\nthe context always contains an answer, whereas in\n\n(SST)\n\nTreebank\nResearch\n\n6The datasets are:\n\nSentiment\nMicrosoft\n(Dolan and Brockett,",
+      "length": 906,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 17,
+      "text": "(SST)\n\nTreebank\nResearch\n\n6The datasets are:\n\nSentiment\nMicrosoft\n(Dolan and Brockett,\n\n5The authors and their afﬁliated institutions are not in any\nway afﬁliated with the creation of the OpenWebText dataset.\nCoLA (Warstadt et al., 2018),\n(Socher et al.,\nStanford\nCorpus\n2013),\n(MRPC)\nSemantic Tex-\n(Agirre et al., 2007),\ntual Similarity Benchmark (STS)\nQuora Question Pairs (QQP) (Iyer et al., 2016), Multi-\nGenre NLI (MNLI) (Williams et al., 2018), Question NLI\n(Rajpurkar et al., 2016), Recognizing Textual\n(QNLI)\nEntailment\n(Dagan et al., 2006; Bar-Haim et al.,\n2006; Giampiccolo et al., 2007; Bentivogli et al., 2009) and\nWinograd NLI (WNLI) (Levesque et al., 2011).\n\nParagraph\n\n2005),\n\n(RTE)",
+      "length": 697,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 18,
+      "text": "Paragraph\n\n2005),\n\n(RTE)\n\n\fV2.0 some questions are not answered in the pro-\nvided context, making the task more challenging.\nFor SQuAD V1.1 we adopt the same span pre-\ndiction method as BERT (Devlin et al., 2019). For\nSQuAD V2.0, we add an additional binary classi-\nﬁer to predict whether the question is answerable,\nwhich we train jointly by summing the classiﬁca-\ntion and span loss terms. During evaluation, we\nonly predict span indices on pairs that are classi-\nﬁed as answerable.",
+      "length": 484,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 19,
+      "text": "RACE The ReAding Comprehension from Ex-\naminations (RACE) (Lai et al., 2017) task is a\nlarge-scale reading comprehension dataset with\nmore than 28,000 passages and nearly 100,000\nquestions. The dataset is collected from English\nexaminations in China, which are designed for\nmiddle and high school students. In RACE, each\npassage is associated with multiple questions. For\nevery question, the task is to select one correct an-\nswer from four options. RACE has signiﬁcantly\nlonger context than other popular reading compre-\nhension datasets and the proportion of questions\nthat requires reasoning is very large.\n\n4 Training Procedure Analysis\n\nThis section explores and quantiﬁes which choices\nare important for successfully pretraining BERT\nmodels. We keep the model architecture ﬁxed.7\nSpeciﬁcally, we begin by training BERT models\nwith the same conﬁguration as BERTBASE (L =\n12, H = 768, A = 12, 110M params).\n\n4.1 Static vs. Dynamic Masking",
+      "length": 942,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 20,
+      "text": "4.1 Static vs. Dynamic Masking\n\nAs discussed in Section 2, BERT relies on ran-\ndomly masking and predicting tokens. The orig-\ninal BERT implementation performed masking\nonce during data preprocessing, resulting in a sin-\ngle static mask. To avoid using the same mask for\neach training instance in every epoch, training data\nwas duplicated 10 times so that each sequence is\nmasked in 10 different ways over the 40 epochs of\ntraining. Thus, each training sequence was seen\nwith the same mask four times during training.\n\nWe compare this strategy with dynamic mask-\ning where we generate the masking pattern every\ntime we feed a sequence to the model. This be-\ncomes crucial when pretraining for more steps or\nwith larger datasets.\n\n7Studying architectural changes, including larger archi-\n\ntectures, is an important area for future work.\n\nMasking SQuAD 2.0 MNLI-m SST-2\n\nreference\n\n76.3\n\n84.3\n\n92.8\n\nOur reimplementation:\nstatic\ndynamic\n\n78.3\n78.7\n\n84.3\n84.0\n\n92.5\n92.9",
+      "length": 967,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 21,
+      "text": "tectures, is an important area for future work.\n\nMasking SQuAD 2.0 MNLI-m SST-2\n\nreference\n\n76.3\n\n84.3\n\n92.8\n\nOur reimplementation:\nstatic\ndynamic\n\n78.3\n78.7\n\n84.3\n84.0\n\n92.5\n92.9\n\nTable 1: Comparison between static and dynamic\nmasking for BERTBASE . We report F1 for SQuAD and\naccuracy for MNLI-m and SST-2. Reported results are\nmedians over 5 random initializations (seeds). Refer-\nence results are from Yang et al. (2019).\n\n1\n\nthe\n\ncompares\n\nResults Table\npublished\nBERTBASE results from Devlin et al. (2019) to our\nreimplementation with either static or dynamic\nmasking. We ﬁnd that our reimplementation\nwith static masking performs similar\nto the\noriginal BERT model, and dynamic masking is\ncomparable or slightly better than static masking.\nGiven these results and the additional efﬁciency\nbeneﬁts of dynamic masking, we use dynamic\nmasking in the remainder of the experiments.\n\n4.2 Model Input Format and Next Sentence\n\nPrediction",
+      "length": 937,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 22,
+      "text": "4.2 Model Input Format and Next Sentence\n\nPrediction\n\nIn the original BERT pretraining procedure, the\nmodel observes two concatenated document seg-\nments, which are either sampled contiguously\nfrom the same document (with p = 0.5) or from\ndistinct documents. In addition to the masked lan-\nguage modeling objective, the model is trained to\npredict whether the observed document segments\ncome from the same or distinct documents via an\nauxiliary Next Sentence Prediction (NSP) loss.\n\nThe NSP loss was hypothesized to be an impor-\ntant factor in training the original BERT model.\nDevlin et al. (2019) observe that removing NSP\nhurts performance, with signiﬁcant performance\ndegradation on QNLI, MNLI, and SQuAD 1.1.\nHowever, some recent work has questioned the\nnecessity of the NSP loss (Lample and Conneau,\n2019; Yang et al., 2019; Joshi et al., 2019).\n\nTo better understand this discrepancy, we com-\n\npare several alternative training formats:",
+      "length": 943,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 23,
+      "text": "To better understand this discrepancy, we com-\n\npare several alternative training formats:\n\n• SEGMENT-PAIR+NSP: This follows the original\ninput format used in BERT (Devlin et al., 2019),\nwith the NSP loss. Each input has a pair of seg-\nments, which can each contain multiple natural\nsentences, but the total combined length must\nbe less than 512 tokens.\n\n\fModel\n\nSQuAD 1.1/2.0 MNLI-m SST-2 RACE\n\nOur reimplementation (with NSP loss):\nSEGMENT-PAIR\nSENTENCE-PAIR\n\n90.4/78.7\n88.7/76.2\n\nOur reimplementation (without NSP loss):\nFULL-SENTENCES\nDOC-SENTENCES\n\n90.4/79.1\n90.6/79.7\n\nBERTBASE\nXLNetBASE (K = 7)\nXLNetBASE (K = 6)\n\n88.5/76.3\n–/81.3\n–/81.0\n\n84.0\n82.9\n\n84.7\n84.7\n\n84.3\n85.8\n85.6\n\n92.9\n92.1\n\n92.5\n92.7\n\n92.8\n92.7\n93.4\n\n64.2\n63.0\n\n64.8\n65.6\n\n64.3\n66.1\n66.7",
+      "length": 758,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 24,
+      "text": "BERTBASE\nXLNetBASE (K = 7)\nXLNetBASE (K = 6)\n\n88.5/76.3\n–/81.3\n–/81.0\n\n84.0\n82.9\n\n84.7\n84.7\n\n84.3\n85.8\n85.6\n\n92.9\n92.1\n\n92.5\n92.7\n\n92.8\n92.7\n93.4\n\n64.2\n63.0\n\n64.8\n65.6\n\n64.3\n66.1\n66.7\n\nTable 2: Development set results for base models pretrained over BOOKCORPUS and WIKIPEDIA. All models are\ntrained for 1M steps with a batch size of 256 sequences. We report F1 for SQuAD and accuracy for MNLI-m,\nSST-2 and RACE. Reported results are medians over ﬁve random initializations (seeds). Results for BERTBASE and\nXLNetBASE are from Yang et al. (2019).\n\n• SENTENCE-PAIR+NSP: Each input contains a\npair of natural sentences, either sampled from\na contiguous portion of one document or from\nseparate documents. Since these inputs are sig-\nniﬁcantly shorter than 512 tokens, we increase\nthe batch size so that the total number of tokens\nremains similar to SEGMENT-PAIR+NSP. We re-\ntain the NSP loss.",
+      "length": 889,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 25,
+      "text": "• FULL-SENTENCES: Each input is packed with\nfull sentences sampled contiguously from one\nor more documents, such that the total length is\nat most 512 tokens. Inputs may cross document\nboundaries. When we reach the end of one doc-\nument, we begin sampling sentences from the\nnext document and add an extra separator token\nbetween documents. We remove the NSP loss.\n\n• DOC-SENTENCES: Inputs are constructed sim-\nilarly to FULL-SENTENCES, except that they\nmay not cross document boundaries.\nInputs\nsampled near the end of a document may be\nshorter than 512 tokens, so we dynamically in-\ncrease the batch size in these cases to achieve\na similar number of total\ntokens as FULL-\nSENTENCES. We remove the NSP loss.",
+      "length": 708,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 26,
+      "text": "Results Table 2 shows results for the four dif-\nferent settings. We ﬁrst compare the original\nSEGMENT-PAIR input format from Devlin et al.\n(2019) to the SENTENCE-PAIR format; both for-\nmats retain the NSP loss, but the latter uses sin-\ngle sentences. We ﬁnd that using individual\nsentences hurts performance on downstream\ntasks, which we hypothesize is because the model\nis not able to learn long-range dependencies.\n\nWe next compare training without\n\nthe NSP\nloss and training with blocks of text from a sin-\ngle document (DOC-SENTENCES). We ﬁnd that\nthis setting outperforms the originally published\nBERTBASE results and that removing the NSP loss\nmatches or slightly improves downstream task\nperformance, in contrast to Devlin et al. (2019).\nIt is possible that the original BERT implementa-\ntion may only have removed the loss term while\nstill retaining the SEGMENT-PAIR input format.",
+      "length": 888,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 27,
+      "text": "Finally we ﬁnd that restricting sequences to\ncome from a single document (DOC-SENTENCES)\nperforms slightly better than packing sequences\nfrom multiple documents (FULL-SENTENCES).\nHowever, because the DOC-SENTENCES format\nresults in variable batch sizes, we use FULL-\nSENTENCES in the remainder of our experiments\nfor easier comparison with related work.\n\n4.3 Training with large batches\n\nPast work in Neural Machine Translation has\nshown that training with very large mini-batches\ncan both improve optimization speed and end-task\nperformance when the learning rate is increased\nappropriately (Ott et al., 2018). Recent work has\nshown that BERT is also amenable to large batch\ntraining (You et al., 2019).\n(2019)\n\ntrained\nBERTBASE for 1M steps with a batch size of\n256 sequences. This is equivalent in computa-\ntional cost, via gradient accumulation, to training\nfor 125K steps with a batch size of 2K sequences,\nor for 31K steps with a batch size of 8K.\n\nDevlin et al.\n\noriginally",
+      "length": 980,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 28,
+      "text": "Devlin et al.\n\noriginally\n\nIn Table 3 we compare perplexity and end-\n\n\fbsz\n\nsteps\n\nlr\n\nppl MNLI-m SST-2\n\n256\n1M 1e-4\n2K 125K 7e-4\n31K 1e-3\n8K\n\n3.99\n3.68\n3.77\n\n84.7\n85.2\n84.6\n\n92.7\n92.9\n92.8\n\nTable 3: Perplexity on held-out training data (ppl) and\ndevelopment set accuracy for base models trained over\nBOOKCORPUS and WIKIPEDIA with varying batch\nsizes (bsz). We tune the learning rate (lr) for each set-\nting. Models make the same number of passes over the\ndata (epochs) and have the same computational cost.\n\ntask performance of BERTBASE as we increase the\nbatch size, controlling for the number of passes\nthrough the training data. We observe that train-\ning with large batches improves perplexity for the\nmasked language modeling objective, as well as\nend-task accuracy. Large batches are also easier to\nparallelize via distributed data parallel training,8\nand in later experiments we train with batches of\n8K sequences.",
+      "length": 922,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 29,
+      "text": "Notably You et al. (2019) train BERT with even\nlarger batche sizes, up to 32K sequences. We leave\nfurther exploration of the limits of large batch\ntraining to future work.\n\n4.4 Text Encoding\n\nByte-Pair Encoding (BPE) (Sennrich et al., 2016)\nis a hybrid between character- and word-level rep-\nresentations that allows handling the large vocab-\nularies common in natural language corpora. In-\nstead of full words, BPE relies on subwords units,\nwhich are extracted by performing statistical anal-\nysis of the training corpus.",
+      "length": 522,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 30,
+      "text": "BPE vocabulary sizes typically range from\n10K-100K subword units. However, unicode char-\nacters can account for a sizeable portion of this\nvocabulary when modeling large and diverse cor-\npora, such as the ones considered in this work.\nRadford et al. (2019) introduce a clever imple-\nmentation of BPE that uses bytes instead of uni-\ncode characters as the base subword units. Using\nbytes makes it possible to learn a subword vocab-\nulary of a modest size (50K units) that can still en-\ncode any input text without introducing any “un-\nknown” tokens.\n\n8Large batch training can improve training efﬁciency even\nwithout large scale parallel hardware through gradient ac-\ncumulation, whereby gradients from multiple mini-batches\nare accumulated locally before each optimization step. This\nfunctionality is supported natively in FAIRSEQ (Ott et al.,\n2019).\n\nThe\n\nBERT\n\noriginal",
+      "length": 871,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 31,
+      "text": "The\n\nBERT\n\noriginal\n\nimplementa-\ntion (Devlin et al., 2019) uses a character-level\nBPE vocabulary of size 30K, which is learned\nafter preprocessing the input with heuristic tok-\nenization rules. Following Radford et al. (2019),\nwe instead consider training BERT with a larger\nbyte-level BPE vocabulary containing 50K sub-\nword units, without any additional preprocessing\nor tokenization of the input. This adds approxi-\nmately 15M and 20M additional parameters for\nBERTBASE and BERTLARGE, respectively.\n\nEarly experiments revealed only slight dif-\nferences between these encodings, with the\nRadford et al.\n(2019) BPE achieving slightly\nworse end-task performance on some tasks. Nev-\nertheless, we believe the advantages of a univer-\nsal encoding scheme outweighs the minor degre-\ndation in performance and use this encoding in\nthe remainder of our experiments. A more de-\ntailed comparison of these encodings is left to fu-\nture work.\n\n5 RoBERTa",
+      "length": 945,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 32,
+      "text": "5 RoBERTa\n\nIn the previous section we propose modiﬁcations\nto the BERT pretraining procedure that improve\nend-task performance. We now aggregate these\nimprovements and evaluate their combined im-\npact. We call this conﬁguration RoBERTa for\nRobustly optimized BERT approach.\nSpeciﬁ-\ncally, RoBERTa is trained with dynamic mask-\ning (Section 4.1), FULL-SENTENCES without NSP\nloss (Section 4.2), large mini-batches (Section 4.3)\nand a larger byte-level BPE (Section 4.4).",
+      "length": 468,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 33,
+      "text": "Additionally, we investigate two other impor-\ntant factors that have been under-emphasized in\nprevious work: (1) the data used for pretraining,\nand (2) the number of training passes through the\ndata. For example, the recently proposed XLNet\narchitecture (Yang et al., 2019) is pretrained us-\ning nearly 10 times more data than the original\nBERT (Devlin et al., 2019). It is also trained with\na batch size eight times larger for half as many op-\ntimization steps, thus seeing four times as many\nsequences in pretraining compared to BERT.\n\nTo help disentangle the importance of these fac-\ntors from other modeling choices (e.g., the pre-\ntraining objective), we begin by training RoBERTa\nfollowing the BERTLARGE architecture (L = 24,\nH = 1024, A = 16, 355M parameters). We\npretrain for 100K steps over a comparable BOOK-\nCORPUS plus WIKIPEDIA dataset as was used in\n\n\fModel\n\nRoBERTa\n\ndata\n\nbsz\n\nsteps\n\nSQuAD\n(v1.1/2.0)\n\nMNLI-m SST-2",
+      "length": 930,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 34,
+      "text": "Model\n\nRoBERTa\n\ndata\n\nbsz\n\nsteps\n\nSQuAD\n(v1.1/2.0)\n\nMNLI-m SST-2\n\nwith BOOKS + WIKI\n+ additional data (§3.2)\n+ pretrain longer\n+ pretrain even longer\n\n16GB\n8K 100K 93.6/87.3\n160GB 8K 100K 94.0/87.7\n160GB 8K 300K 94.4/88.7\n160GB 8K 500K 94.6/89.4\n\n89.0\n89.3\n90.0\n90.2\n\n95.3\n95.6\n96.1\n96.4\n\nBERTLARGE\n\nwith BOOKS + WIKI\n\n13GB\n\n256\n\n1M 90.9/81.8\n\n86.6\n\n93.7\n\nXLNetLARGE\n\nwith BOOKS + WIKI\n+ additional data\n\n13GB\n1M 94.0/87.8\n126GB 2K 500K 94.5/88.8\n\n256\n\n88.4\n89.8\n\n94.4\n95.6\n\nTable 4: Development set results for RoBERTa as we pretrain over more data (16GB → 160GB of text) and pretrain\nfor longer (100K → 300K → 500K steps). Each row accumulates improvements from the rows above. RoBERTa\nmatches the architecture and training objective of BERTLARGE . Results for BERTLARGE and XLNetLARGE are from\nDevlin et al. (2019) and Yang et al. (2019), respectively. Complete results on all GLUE tasks can be found in the\nAppendix.",
+      "length": 920,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 35,
+      "text": "Devlin et al. (2019). We pretrain our model using\n1024 V100 GPUs for approximately one day.\n\nwe consider RoBERTa trained for 500K steps over\nall ﬁve of the datasets introduced in Section 3.2.\n\nResults We present our results in Table 4. When\ncontrolling for training data, we observe that\nRoBERTa provides a large improvement over the\noriginally reported BERTLARGE results, reafﬁrming\nthe importance of the design choices we explored\nin Section 4.\n\nNext, we combine this data with the three ad-\nditional datasets described in Section 3.2. We\ntrain RoBERTa over the combined data with the\nsame number of training steps as before (100K).\nIn total, we pretrain over 160GB of text. We ob-\nserve further improvements in performance across\nall downstream tasks, validating the importance of\ndata size and diversity in pretraining.9",
+      "length": 824,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 36,
+      "text": "Finally, we pretrain RoBERTa for signiﬁcantly\nlonger, increasing the number of pretraining steps\nfrom 100K to 300K, and then further to 500K. We\nagain observe signiﬁcant gains in downstream task\nperformance, and the 300K and 500K step mod-\nels outperform XLNetLARGE across most tasks. We\nnote that even our longest-trained model does not\nappear to overﬁt our data and would likely beneﬁt\nfrom additional training.\n\nIn the rest of the paper, we evaluate our best\nRoBERTa model on the three different bench-\nmarks: GLUE, SQuaD and RACE. Speciﬁcally\n\n9Our experiments conﬂate increases in data size and di-\nversity. We leave a more careful analysis of these two dimen-\nsions to future work.\n\n5.1 GLUE Results",
+      "length": 705,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 37,
+      "text": "9Our experiments conﬂate increases in data size and di-\nversity. We leave a more careful analysis of these two dimen-\nsions to future work.\n\n5.1 GLUE Results\n\nFor GLUE we consider two ﬁnetuning settings.\nIn the ﬁrst setting (single-task, dev) we ﬁnetune\nRoBERTa separately for each of the GLUE tasks,\nusing only the training data for the correspond-\ning task. We consider a limited hyperparameter\nsweep for each task, with batch sizes ∈ {16, 32}\nand learning rates ∈ {1e−5, 2e−5, 3e−5}, with a\nlinear warmup for the ﬁrst 6% of steps followed by\na linear decay to 0. We ﬁnetune for 10 epochs and\nperform early stopping based on each task’s eval-\nuation metric on the dev set. The rest of the hyper-\nparameters remain the same as during pretraining.\nIn this setting, we report the median development\nset results for each task over ﬁve random initial-\nizations, without model ensembling.",
+      "length": 884,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 38,
+      "text": "In the second setting (ensembles, test), we com-\npare RoBERTa to other approaches on the test set\nvia the GLUE leaderboard. While many submis-\nsions to the GLUE leaderboard depend on multi-\ntask ﬁnetuning, our submission depends only on\nsingle-task ﬁnetuning. For RTE, STS and MRPC\nwe found it helpful to ﬁnetune starting from the\nMNLI single-task model, rather than the baseline\npretrained RoBERTa. We explore a slightly wider\nhyperparameter space, described in the Appendix,\nand ensemble between 5 and 7 models per task.\n\n\fMNLI\n\nQNLI QQP RTE SST MRPC CoLA STS WNLI Avg\n\nSingle-task single models on dev\n92.3\nBERTLARGE\n93.9\nXLNetLARGE\n94.7\nRoBERTa\n\n86.6/-\n89.8/-\n90.2/90.2\n\n91.3\n91.8\n92.2\n\n70.4\n83.8\n86.6\n\n93.2\n95.6\n96.4\n\nEnsembles on test (from leaderboard as of July 25, 2019)\n95.2\nALICE\n96.5\nMT-DNN\n96.8\nXLNet\n96.7\nRoBERTa\n\n88.2/87.9\n87.9/87.4\n90.2/89.8\n90.8/90.2\n\n90.7\n89.9\n90.3\n90.2\n\n83.5\n86.3\n86.3\n88.2\n\n95.7\n96.0\n98.6\n98.9\n\n88.0\n89.2\n90.9\n\n92.6\n92.7\n93.0\n92.3\n\n60.6\n63.6\n68.0",
+      "length": 983,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 39,
+      "text": "88.2/87.9\n87.9/87.4\n90.2/89.8\n90.8/90.2\n\n90.7\n89.9\n90.3\n90.2\n\n83.5\n86.3\n86.3\n88.2\n\n95.7\n96.0\n98.6\n98.9\n\n88.0\n89.2\n90.9\n\n92.6\n92.7\n93.0\n92.3\n\n60.6\n63.6\n68.0\n\n68.6\n68.4\n67.8\n67.8\n\n90.0\n91.8\n92.4\n\n91.1\n91.1\n91.6\n92.2\n\n-\n-\n91.3\n\n80.8\n89.0\n90.4\n89.0\n\n-\n-\n-\n\n86.3\n87.6\n88.4\n88.5\n\nTable 5: Results on GLUE. All results are based on a 24-layer architecture. BERTLARGE and XLNetLARGE results\nare from Devlin et al. (2019) and Yang et al. (2019), respectively. RoBERTa results on the development set are a\nmedian over ﬁve runs. RoBERTa results on the test set are ensembles of single-task models. For RTE, STS and\nMRPC we ﬁnetune starting from the MNLI model instead of the baseline pretrained model. Averages are obtained\nfrom the GLUE leaderboard.\n\nTask-speciﬁc modiﬁcations Two of the GLUE\ntasks require task-speciﬁc ﬁnetuning approaches\nto achieve competitive leaderboard results.",
+      "length": 874,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 40,
+      "text": "Task-speciﬁc modiﬁcations Two of the GLUE\ntasks require task-speciﬁc ﬁnetuning approaches\nto achieve competitive leaderboard results.\n\nQNLI: Recent submissions on the GLUE\nleaderboard adopt a pairwise ranking formulation\nfor the QNLI task, in which candidate answers\nare mined from the training set and compared to\none another, and a single (question, candidate)\npair is classiﬁed as positive (Liu et al., 2019b,a;\nYang et al., 2019). This formulation signiﬁcantly\nsimpliﬁes the task, but is not directly comparable\nto BERT (Devlin et al., 2019). Following recent\nwork, we adopt the ranking approach for our test\nsubmission, but for direct comparison with BERT\nwe report development set results based on a pure\nclassiﬁcation approach.",
+      "length": 734,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 41,
+      "text": "WNLI: We found the provided NLI-format\ndata to be challenging to work with.\nInstead\nwe use the reformatted WNLI data from Super-\nGLUE (Wang et al., 2019a), which indicates the\nspan of the query pronoun and referent. We ﬁne-\ntune RoBERTa using the margin ranking loss from\nKocijan et al. (2019). For a given input sentence,\nwe use spaCy (Honnibal and Montani, 2017) to\nextract additional candidate noun phrases from the\nsentence and ﬁnetune our model so that it assigns\nhigher scores to positive referent phrases than for\nany of the generated negative candidate phrases.\nOne unfortunate consequence of this formulation\nis that we can only make use of the positive train-\ning examples, which excludes over half of the pro-\nvided training examples.10",
+      "length": 747,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 42,
+      "text": "Results We present our results in Table 5. In the\nﬁrst setting (single-task, dev), RoBERTa achieves\nstate-of-the-art results on all 9 of the GLUE\ntask development sets. Crucially, RoBERTa uses\nthe same masked language modeling pretrain-\ning objective and architecture as BERTLARGE, yet\nconsistently outperforms both BERTLARGE and\nXLNetLARGE. This raises questions about the rel-\native importance of model architecture and pre-\ntraining objective, compared to more mundane de-\ntails like dataset size and training time that we ex-\nplore in this work.\n\nIn the second setting (ensembles,\n\ntest), we\nsubmit RoBERTa to the GLUE leaderboard and\nachieve state-of-the-art results on 4 out of 9 tasks\nand the highest average score to date. This is espe-\ncially exciting because RoBERTa does not depend\non multi-task ﬁnetuning, unlike most of the other\ntop submissions. We expect future work may fur-\nther improve these results by incorporating more\nsophisticated multi-task ﬁnetuning procedures.",
+      "length": 986,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 43,
+      "text": "5.2 SQuAD Results\n\nWe adopt a much simpler approach for SQuAD\nIn particular, while\ncompared to past work.\nboth BERT (Devlin et al., 2019)\nand XL-\nNet (Yang et al., 2019) augment their training data\nwith additional QA datasets, we only ﬁnetune\nRoBERTa using the provided SQuAD training\ndata. Yang et al. (2019) also employed a custom\nlayer-wise learning rate schedule to ﬁnetune\n\n10While we only use the provided WNLI training data, our\n\nresults could potentially be improved by augmenting this with\nadditional pronoun disambiguation datasets.\n\n\fModel\n\nSQuAD 1.1\nEM F1\n\nSQuAD 2.0\nF1\nEM\n\nSingle models on dev, w/o data augmentation\nBERTLARGE\nXLNetLARGE\nRoBERTa\n\n84.1\n89.0\n88.9\n\n79.0\n86.1\n86.5\n\n81.8\n88.8\n89.4\n\n90.9\n94.5\n94.6\n\nSingle models on test (as of July 25, 2019)\nXLNetLARGE\nRoBERTa\nXLNet + SG-Net Veriﬁer\n\n86.3†\n86.8\n87.0†\n\n89.1†\n89.8\n89.9†",
+      "length": 845,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 44,
+      "text": "84.1\n89.0\n88.9\n\n79.0\n86.1\n86.5\n\n81.8\n88.8\n89.4\n\n90.9\n94.5\n94.6\n\nSingle models on test (as of July 25, 2019)\nXLNetLARGE\nRoBERTa\nXLNet + SG-Net Veriﬁer\n\n86.3†\n86.8\n87.0†\n\n89.1†\n89.8\n89.9†\n\nTable 6: Results on SQuAD. † indicates results that de-\npend on additional external training data. RoBERTa\nuses only the provided SQuAD data in both dev and\ntest settings. BERTLARGE and XLNetLARGE results are\nfrom Devlin et al. (2019) and Yang et al. (2019), re-\nspectively.\n\nXLNet, while we use the same learning rate for\nall layers.\n\nFor SQuAD v1.1 we follow the same ﬁnetun-\ning procedure as Devlin et al. (2019). For SQuAD\nv2.0, we additionally classify whether a given\nquestion is answerable; we train this classiﬁer\njointly with the span predictor by summing the\nclassiﬁcation and span loss terms.",
+      "length": 790,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 45,
+      "text": "Results We present our results in Table 6. On\nthe SQuAD v1.1 development set, RoBERTa\nmatches the state-of-the-art set by XLNet. On the\nSQuAD v2.0 development set, RoBERTa sets a\nnew state-of-the-art, improving over XLNet by 0.4\npoints (EM) and 0.6 points (F1).\n\nWe also submit RoBERTa to the public SQuAD\n2.0 leaderboard and evaluate its performance rel-\native to other systems. Most of the top systems\nbuild upon either BERT (Devlin et al., 2019) or\nXLNet (Yang et al., 2019), both of which rely on\nadditional external training data. In contrast, our\nsubmission does not use any additional data.\n\nOur single RoBERTa model outperforms all but\none of the single model submissions, and is the\ntop scoring system among those that do not rely\non data augmentation.\n\n5.3 RACE Results\n\nIn RACE, systems are provided with a passage of\ntext, an associated question, and four candidate an-\nswers. Systems are required to classify which of\nthe four candidate answers is correct.",
+      "length": 969,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 46,
+      "text": "In RACE, systems are provided with a passage of\ntext, an associated question, and four candidate an-\nswers. Systems are required to classify which of\nthe four candidate answers is correct.\n\nWe modify RoBERTa for this task by concate-\n\nModel\n\nAccuracy Middle High\n\nSingle models on test (as of July 25, 2019)\n70.1\n72.0\nBERTLARGE\n80.2\n81.7\nXLNetLARGE\n\n76.6\n85.4\n\nRoBERTa\n\n83.2\n\n86.5\n\n81.3\n\nTable 7: Results on the RACE test set. BERTLARGE and\nXLNetLARGE results are from Yang et al. (2019).\n\nnating each candidate answer with the correspond-\ning question and passage. We then encode each of\nthese four sequences and pass the resulting [CLS]\nrepresentations through a fully-connected layer,\nwhich is used to predict the correct answer. We\ntruncate question-answer pairs that are longer than\n128 tokens and, if needed, the passage so that the\ntotal length is at most 512 tokens.",
+      "length": 874,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 47,
+      "text": "Results on the RACE test sets are presented in\nTable 7. RoBERTa achieves state-of-the-art results\non both middle-school and high-school settings.\n\n6 Related Work\n\nhave\n\nbeen\n\nobjectives,\n(Dai and Le,\n\ntraining\nlanguage modeling",
+      "length": 227,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 48,
+      "text": "designed\nPretraining methods\ninclud-\nwith\ndifferent\ning\n2015;\nPeters et al., 2018; Howard and Ruder, 2018),\nmachine translation (McCann et al., 2017), and\nmasked language modeling (Devlin et al., 2019;\nLample and Conneau, 2019).\nMany recent\npapers have used a basic recipe of ﬁnetuning\nmodels for each end task (Howard and Ruder,\n2018; Radford et al., 2018),\nand pretraining\nwith some variant of a masked language model\nHowever, newer methods have\nobjective.\nimproved performance by multi-task ﬁne tun-\nincorporating entity\ning (Dong et al., 2019),\nspan predic-\n(Sun et al., 2019),\nembeddings\ntion (Joshi et al., 2019), and multiple variants\nof autoregressive pretraining (Song et al., 2019;\nChan et al., 2019; Yang et al., 2019).\nPerfor-\nmance is also typically improved by training\nbigger models on more data (Devlin et al.,\n2019; Baevski et al., 2019; Yang et al., 2019;\nRadford et al., 2019). Our goal was to replicate,\nsimplify, and better tune the training of BERT,",
+      "length": 971,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 49,
+      "text": "bigger models on more data (Devlin et al.,\n2019; Baevski et al., 2019; Yang et al., 2019;\nRadford et al., 2019). Our goal was to replicate,\nsimplify, and better tune the training of BERT,\nas a reference point for better understanding the\nrelative performance of all of these methods.",
+      "length": 283,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 50,
+      "text": "7 Conclusion\n\nWe carefully evaluate a number of design de-\ncisions when pretraining BERT models. We\nﬁnd that performance can be substantially im-\nproved by training the model longer, with bigger\nbatches over more data; removing the next sen-\ntence prediction objective; training on longer se-\nquences; and dynamically changing the masking\npattern applied to the training data. Our improved\npretraining procedure, which we call RoBERTa,\nachieves state-of-the-art results on GLUE, RACE\nand SQuAD, without multi-task ﬁnetuning for\nGLUE or additional data for SQuAD. These re-\nsults illustrate the importance of these previ-\nously overlooked design decisions and suggest\nthat BERT’s pretraining objective remains com-\npetitive with recently proposed alternatives.\n\nWe\n\nadditionally\n\nCC-NEWS,\ncode\nfor\nhttps://github.com/pytorch/fairseq.\n\nand\npretraining\n\na\nnovel\nour models\nﬁnetuning\n\ndataset,\nand\nat:\n\nuse\nrelease\n\nand\n\nReferences",
+      "length": 927,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 51,
+      "text": "We\n\nadditionally\n\nCC-NEWS,\ncode\nfor\nhttps://github.com/pytorch/fairseq.\n\nand\npretraining\n\na\nnovel\nour models\nﬁnetuning\n\ndataset,\nand\nat:\n\nuse\nrelease\n\nand\n\nReferences\n\nEneko Agirre, Llu’is M‘arquez, and Richard Wicen-\ntowski, editors. 2007. Proceedings of the Fourth\nInternational Workshop on Semantic Evaluations\n(SemEval-2007).\n\nAlexei Baevski, Sergey Edunov, Yinhan Liu, Luke\nCloze-\nZettlemoyer, and Michael Auli. 2019.\ndriven pretraining of self-attention networks. arXiv\npreprint arXiv:1903.07785.\n\nRoy Bar-Haim, Ido Dagan, Bill Dolan, Lisa Ferro,\nDanilo Giampiccolo, Bernardo Magnini, and Idan\nSzpektor. 2006. The second PASCAL recognising\ntextual entailment challenge. In Proceedings of the\nsecond PASCAL challenges workshop on recognis-\ning textual entailment.\n\nLuisa Bentivogli, Ido Dagan, Hoa Trang Dang, Danilo\nGiampiccolo, and Bernardo Magnini. 2009. The\nﬁfth PASCAL recognizing textual entailment chal-\nlenge.",
+      "length": 922,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 52,
+      "text": "Luisa Bentivogli, Ido Dagan, Hoa Trang Dang, Danilo\nGiampiccolo, and Bernardo Magnini. 2009. The\nﬁfth PASCAL recognizing textual entailment chal-\nlenge.\n\nSamuel R Bowman, Gabor Angeli, Christopher Potts,\nand Christopher D Manning. 2015. A large anno-\ntated corpus for learning natural language inference.\nIn Empirical Methods in Natural Language Process-\ning (EMNLP).\n\nWilliam Chan, Nikita Kitaev, Kelvin Guu, Mitchell\nStern, and Jakob Uszkoreit. 2019. KERMIT: Gener-\native insertion-based modeling for sequences. arXiv\npreprint arXiv:1906.01604.\n\nIdo Dagan, Oren Glickman, and Bernardo Magnini.\n2006. The PASCAL recognising textual entailment\nchallenge. In Machine learning challenges. evalu-\nating predictive uncertainty, visual object classiﬁca-\ntion, and recognising tectual entailment.\n\nAndrew M Dai and Quoc V Le. 2015. Semi-supervised\nsequence learning. In Advances in Neural Informa-\ntion Processing Systems (NIPS).",
+      "length": 923,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 53,
+      "text": "Andrew M Dai and Quoc V Le. 2015. Semi-supervised\nsequence learning. In Advances in Neural Informa-\ntion Processing Systems (NIPS).\n\nJacob Devlin, Ming-Wei Chang, Kenton Lee, and\nKristina Toutanova. 2019. BERT: Pre-training of\ndeep bidirectional transformers for language under-\nstanding. In North American Association for Com-\nputational Linguistics (NAACL).\n\nWilliam B Dolan and Chris Brockett. 2005. Auto-\nmatically constructing a corpus of sentential para-\nphrases. In Proceedings of the International Work-\nshop on Paraphrasing.\n\nLi Dong, Nan Yang, Wenhui Wang, Furu Wei,\nXiaodong Liu, Yu Wang, Jianfeng Gao, Ming\nUniﬁed\nZhou, and Hsiao-Wuen Hon. 2019.\nlanguage model pre-training for natural language\narXiv preprint\nunderstanding and generation.\narXiv:1905.03197.\n\nDanilo Giampiccolo, Bernardo Magnini, Ido Dagan,\nand Bill Dolan. 2007. The third PASCAL recog-\nnizing textual entailment challenge. In Proceedings\nof the ACL-PASCAL workshop on textual entailment\nand paraphrasing.",
+      "length": 984,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 54,
+      "text": "Aaron Gokaslan and Vanya Cohen. 2019. Openweb-\nhttp://web.archive.org/\n\ntext corpus.\nsave/http://Skylion007.github.io/\nOpenWebTextCorpus.\n\nFelix Hamborg, Norman Meuschke, Corinna Bre-\nitinger, and Bela Gipp. 2017.\nnews-please: A\ngeneric news crawler and extractor. In Proceedings\nof the 15th International Symposium of Information\nScience.\n\nDan Hendrycks and Kevin Gimpel. 2016. Gaus-\narXiv preprint\n\nsian error linear units (gelus).\narXiv:1606.08415.\n\nMatthew Honnibal and Ines Montani. 2017. spaCy 2:\nNatural language understanding with Bloom embed-\ndings, convolutional neural networks and incremen-\ntal parsing. To appear.\n\nJeremy Howard and Sebastian Ruder. 2018. Universal\nlanguage model ﬁne-tuning for text classiﬁcation.\narXiv preprint arXiv:1801.06146.\n\nShankar Iyer, Nikhil Dandekar, and Kornl Cser-\nnai. 2016. First quora dataset release: Question\npairs. https://data.quora.com/First-\nQuora-Dataset-Release-Question-\nPairs.",
+      "length": 934,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 55,
+      "text": "Shankar Iyer, Nikhil Dandekar, and Kornl Cser-\nnai. 2016. First quora dataset release: Question\npairs. https://data.quora.com/First-\nQuora-Dataset-Release-Question-\nPairs.\n\n\fMandar Joshi, Danqi Chen, Yinhan Liu, Daniel S.\nWeld, Luke Zettlemoyer, and Omer Levy. 2019.\nImproving pre-training by repre-\nSpanBERT:\narXiv preprint\nsenting and predicting spans.\narXiv:1907.10529.\n\nDiederik Kingma and Jimmy Ba. 2015. Adam: A\nmethod for stochastic optimization. In International\nConference on Learning Representations (ICLR).\n\nVid Kocijan, Ana-Maria Cretu, Oana-Maria Camburu,\nYordan Yordanov, and Thomas Lukasiewicz. 2019.\nA surprisingly robust trick for winograd schema\nchallenge. arXiv preprint arXiv:1905.06290.\n\nGuokun Lai, Qizhe Xie, Hanxiao Liu, Yiming Yang,\nand Eduard Hovy. 2017. Race: Large-scale reading\ncomprehension dataset from examinations. arXiv\npreprint arXiv:1704.04683.",
+      "length": 880,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 56,
+      "text": "Guokun Lai, Qizhe Xie, Hanxiao Liu, Yiming Yang,\nand Eduard Hovy. 2017. Race: Large-scale reading\ncomprehension dataset from examinations. arXiv\npreprint arXiv:1704.04683.\n\nGuillaume Lample and Alexis Conneau. 2019. Cross-\nlingual language model pretraining. arXiv preprint\narXiv:1901.07291.\n\nHector J Levesque, Ernest Davis, and Leora Morgen-\nstern. 2011. The Winograd schema challenge.\nIn\nAAAI Spring Symposium: Logical Formalizations of\nCommonsense Reasoning.\n\nXiaodong Liu, Pengcheng He, Weizhu Chen, and\nJianfeng Gao. 2019a.\nImproving multi-task deep\nneural networks via knowledge distillation for\narXiv preprint\nnatural language understanding.\narXiv:1904.09482.\n\nXiaodong Liu, Pengcheng He, Weizhu Chen, and Jian-\nfeng Gao. 2019b. Multi-task deep neural networks\nfor natural language understanding. arXiv preprint\narXiv:1901.11504.",
+      "length": 837,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 57,
+      "text": "Xiaodong Liu, Pengcheng He, Weizhu Chen, and Jian-\nfeng Gao. 2019b. Multi-task deep neural networks\nfor natural language understanding. arXiv preprint\narXiv:1901.11504.\n\nBryan McCann, James Bradbury, Caiming Xiong, and\nRichard Socher. 2017. Learned in translation: Con-\ntextualized word vectors. In Advances in Neural In-\nformation Processing Systems (NIPS), pages 6297–\n6308.\n\nPaulius Micikevicius, Sharan Narang, Jonah Alben,\nGregory Diamos, Erich Elsen, David Garcia, Boris\nGinsburg, Michael Houston, Oleksii Kuchaiev,\nGanesh Venkatesh, and Hao Wu. 2018. Mixed preci-\nsion training. In International Conference on Learn-\ning Representations.\n\nSebastian Nagel. 2016.\n\nCc-news.\n\nhttp:\n\n//web.archive.org/save/http:\n//commoncrawl.org/2016/10/news-\ndataset-available.",
+      "length": 766,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 58,
+      "text": "Sebastian Nagel. 2016.\n\nCc-news.\n\nhttp:\n\n//web.archive.org/save/http:\n//commoncrawl.org/2016/10/news-\ndataset-available.\n\nMyle Ott, Sergey Edunov, Alexei Baevski, Angela\nFan, Sam Gross, Nathan Ng, David Grangier, and\nFAIRSEQ: A fast, exten-\nMichael Auli. 2019.\nIn North\nsible toolkit for sequence modeling.\nAmerican Association for Computational Linguis-\ntics (NAACL): System Demonstrations.\n\nMyle Ott, Sergey Edunov, David Grangier, and\nMichael Auli. 2018. Scaling neural machine trans-\nlation. In Proceedings of the Third Conference on\nMachine Translation (WMT).\n\nAdam Paszke, Sam Gross, Soumith Chintala, Gre-\ngory Chanan, Edward Yang, Zachary DeVito, Zem-\ning Lin, Alban Desmaison, Luca Antiga, and Adam\nLerer. 2017. Automatic differentiation in PyTorch.\nIn NIPS Autodiff Workshop.",
+      "length": 785,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 59,
+      "text": "Matthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018. Deep contextualized word repre-\nsentations. In North American Association for Com-\nputational Linguistics (NAACL).\n\nAlec Radford, Karthik Narasimhan, Time Salimans,\nand Ilya Sutskever. 2018. Improving language un-\nderstanding with unsupervised learning. Technical\nreport, OpenAI.\n\nAlec Radford, Jeffrey Wu, Rewon Child, David Luan,\nDario Amodei, and Ilya Sutskever. 2019. Language\nmodels are unsupervised multitask learners. Techni-\ncal report, OpenAI.\n\nPranav Rajpurkar, Robin Jia, and Percy Liang. 2018.\nKnow what you don’t know: Unanswerable ques-\nIn Association for Computational\ntions for squad.\nLinguistics (ACL).\n\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. SQuAD: 100,000+ questions for\nmachine comprehension of text. In Empirical Meth-\nods in Natural Language Processing (EMNLP).",
+      "length": 933,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 60,
+      "text": "Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. SQuAD: 100,000+ questions for\nmachine comprehension of text. In Empirical Meth-\nods in Natural Language Processing (EMNLP).\n\nRico Sennrich, Barry Haddow, and Alexandra Birch.\n2016. Neural machine translation of rare words with\nIn Association for Computational\nsubword units.\nLinguistics (ACL), pages 1715–1725.\n\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nIn Empirical Methods in Natural Language\nbank.\nProcessing (EMNLP).\n\nKaitao Song, Xu Tan, Tao Qin, Jianfeng Lu, and\nTie-Yan Liu. 2019. MASS: Masked sequence\nto sequence pre-training for language generation.\nIn International Conference on Machine Learning\n(ICML).",
+      "length": 839,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 61,
+      "text": "Kaitao Song, Xu Tan, Tao Qin, Jianfeng Lu, and\nTie-Yan Liu. 2019. MASS: Masked sequence\nto sequence pre-training for language generation.\nIn International Conference on Machine Learning\n(ICML).\n\nYu Stephanie Sun, Shuohuan Wang, Yukun Li, Shikun\nFeng, Xuyi Chen, Han Zhang, Xinlun Tian, Danxi-\nang Zhu, Hao Tian, and Hua Wu. 2019. ERNIE: En-\nhanced representation through knowledge integra-\ntion. arXiv preprint arXiv:1904.09223.\n\nTrieu H Trinh and Quoc V Le. 2018. A simple\nmethod for commonsense reasoning. arXiv preprint\narXiv:1806.02847.\n\n\fB Pretraining Hyperparameters\n\nTable 9 describes the hyperparameters for pre-\ntraining of RoBERTaLARGE and RoBERTaBASE\n\nC Finetuning Hyperparameters\n\nFinetuning hyperparameters for RACE, SQuAD\nand GLUE are given in Table 10. We select the\nbest hyperparameter values based on the median\nof 5 random seeds for each task.",
+      "length": 861,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 62,
+      "text": "C Finetuning Hyperparameters\n\nFinetuning hyperparameters for RACE, SQuAD\nand GLUE are given in Table 10. We select the\nbest hyperparameter values based on the median\nof 5 random seeds for each task.\n\nAshish Vaswani, Noam Shazeer, Niki Parmar, Jakob\nUszkoreit, Llion Jones, Aidan N Gomez, Łukasz\nKaiser, and Illia Polosukhin. 2017. Attention is all\nyou need. In Advances in neural information pro-\ncessing systems.\n\nAlex Wang, Yada Pruksachatkun, Nikita Nangia,\nAmanpreet Singh, Julian Michael, Felix Hill, Omer\nLevy, and Samuel R. Bowman. 2019a. SuperGLUE:\nA stickier benchmark for general-purpose language\nunderstanding systems. arXiv preprint 1905.00537.\n\nAlex Wang, Amanpreet Singh, Julian Michael, Felix\nHill, Omer Levy, and Samuel R. Bowman. 2019b.\nGLUE: A multi-task benchmark and analysis plat-\nform for natural language understanding. In Inter-\nnational Conference on Learning Representations\n(ICLR).",
+      "length": 908,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 63,
+      "text": "Alex Warstadt, Amanpreet Singh, and Samuel R. Bow-\nman. 2018. Neural network acceptability judg-\nments. arXiv preprint 1805.12471.\n\nAdina Williams, Nikita Nangia, and Samuel Bowman.\n2018. A broad-coverage challenge corpus for sen-\nIn North\ntence understanding through inference.\nAmerican Association for Computational Linguis-\ntics (NAACL).\n\nZhilin Yang, Zihang Dai, Yiming Yang, Jaime Car-\nbonell, Ruslan Salakhutdinov, and Quoc V Le.\n2019. Xlnet: Generalized autoregressive pretrain-\narXiv preprint\ning for language understanding.\narXiv:1906.08237.\n\nYang You, Jing Li, Jonathan Hseu, Xiaodan Song,\nJames Demmel, and Cho-Jui Hsieh. 2019. Reduc-\ning bert pre-training time from 3 days to 76 minutes.\narXiv preprint arXiv:1904.00962.\n\nRowan Zellers, Ari Holtzman, Hannah Rashkin,\nYonatan Bisk, Ali Farhadi, Franziska Roesner, and\nYejin Choi. 2019. Defending against neural fake\nnews. arXiv preprint arXiv:1905.12616.",
+      "length": 915,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 64,
+      "text": "Rowan Zellers, Ari Holtzman, Hannah Rashkin,\nYonatan Bisk, Ali Farhadi, Franziska Roesner, and\nYejin Choi. 2019. Defending against neural fake\nnews. arXiv preprint arXiv:1905.12616.\n\nYukun Zhu, Ryan Kiros, Richard Zemel, Ruslan\nSalakhutdinov, Raquel Urtasun, Antonio Torralba,\nand Sanja Fidler. 2015. Aligning books and movies:\nTowards story-like visual explanations by watch-\nIn arXiv preprint\ning movies and reading books.\narXiv:1506.06724.\n\nAppendix for “RoBERTa: A Robustly\nOptimized BERT Pretraining Approach”\n\nA Full results on GLUE\n\nIn Table 8 we present the full set of development\nset results for RoBERTa. We present results for\na LARGE conﬁguration that follows BERTLARGE,\nas well as a BASE conﬁguration that follows\nBERTBASE.\n\n\fMNLI QNLI QQP RTE SST MRPC CoLA STS\n\nRoBERTaBASE\n\n+ all data + 500k steps\n\n87.6\n\n92.8\n\n91.9\n\n78.7\n\n94.8\n\n90.2\n\n63.6\n\n91.2\n\nRoBERTaLARGE\n\nwith BOOKS + WIKI\n+ additional data (§3.2)\n+ pretrain longer 300k\n+ pretrain longer 500k\n\n89.0\n89.3\n90.0\n90.2",
+      "length": 985,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 65,
+      "text": "+ all data + 500k steps\n\n87.6\n\n92.8\n\n91.9\n\n78.7\n\n94.8\n\n90.2\n\n63.6\n\n91.2\n\nRoBERTaLARGE\n\nwith BOOKS + WIKI\n+ additional data (§3.2)\n+ pretrain longer 300k\n+ pretrain longer 500k\n\n89.0\n89.3\n90.0\n90.2\n\n93.9\n94.0\n94.5\n94.7\n\n91.9\n92.0\n92.2\n92.2\n\n84.5\n82.7\n83.3\n86.6\n\n95.3\n95.6\n96.1\n96.4\n\n90.2\n91.4\n91.1\n90.9\n\n66.3\n66.1\n67.4\n68.0\n\n91.6\n92.2\n92.3\n92.4\n\nTable 8: Development set results on GLUE tasks for various conﬁgurations of RoBERTa.\n\nHyperparam\n\nRoBERTaLARGE RoBERTaBASE\n\nNumber of Layers\nHidden size\nFFN inner hidden size\nAttention heads\nAttention head size\nDropout\nAttention Dropout\nWarmup Steps\nPeak Learning Rate\nBatch Size\nWeight Decay\nMax Steps\nLearning Rate Decay\nAdam ǫ\nAdam β1\nAdam β2\nGradient Clipping\n\n24\n1024\n4096\n16\n64\n0.1\n0.1\n30k\n4e-4\n8k\n0.01\n500k\nLinear\n1e-6\n0.9\n0.98\n0.0\n\n12\n768\n3072\n12\n64\n0.1\n0.1\n24k\n6e-4\n8k\n0.01\n500k\nLinear\n1e-6\n0.9\n0.98\n0.0\n\nTable 9: Hyperparameters for pretraining RoBERTaLARGE and RoBERTaBASE .\n\nHyperparam\n\nRACE SQuAD\n\nGLUE",
+      "length": 960,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    },
+    {
+      "chunk_id": 66,
+      "text": "12\n768\n3072\n12\n64\n0.1\n0.1\n24k\n6e-4\n8k\n0.01\n500k\nLinear\n1e-6\n0.9\n0.98\n0.0\n\nTable 9: Hyperparameters for pretraining RoBERTaLARGE and RoBERTaBASE .\n\nHyperparam\n\nRACE SQuAD\n\nGLUE\n\nLearning Rate\nBatch Size\nWeight Decay\nMax Epochs\nLearning Rate Decay Linear\n0.06\nWarmup ratio\n\n1e-5\n16\n0.1\n4\n\n1.5e-5\n48\n0.01\n2\nLinear\n0.06\n\n{1e-5, 2e-5, 3e-5}\n{16, 32}\n0.1\n10\nLinear\n0.06\n\nTable 10: Hyperparameters for ﬁnetuning RoBERTaLARGE on RACE, SQuAD and GLUE.",
+      "length": 442,
+      "pdf_name": "1907.11692",
+      "method": "semantic",
+      "metadata": {
+        "pdf_name": "1907.11692",
+        "source_file": "C:\\GenAI Training\\RAG\\RAG-based-on-pdf\\data\\extracted_text\\1907.11692_full_text.txt",
+        "has_tables": false
+      }
+    }
+  ]
+}

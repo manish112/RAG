@@ -1,0 +1,56 @@
+{
+  "method": "semantic_recursive",
+  "chunk_size": 1000,
+  "chunk_overlap": 200,
+  "total_pdfs": 5,
+  "total_chunks": 887,
+  "total_text_chunks": 835,
+  "total_table_chunks": 52,
+  "statistics": [
+    {
+      "pdf_name": "1706.03762",
+      "total_chunks": 74,
+      "text_chunks": 64,
+      "table_chunks": 10,
+      "avg_chunk_length": 796,
+      "min_chunk_length": 119,
+      "max_chunk_length": 998
+    },
+    {
+      "pdf_name": "1810.04805",
+      "total_chunks": 111,
+      "text_chunks": 90,
+      "table_chunks": 21,
+      "avg_chunk_length": 861,
+      "min_chunk_length": 244,
+      "max_chunk_length": 999
+    },
+    {
+      "pdf_name": "1907.11692",
+      "total_chunks": 66,
+      "text_chunks": 66,
+      "table_chunks": 0,
+      "avg_chunk_length": 818,
+      "min_chunk_length": 227,
+      "max_chunk_length": 986
+    },
+    {
+      "pdf_name": "1910.10683",
+      "total_chunks": 301,
+      "text_chunks": 280,
+      "table_chunks": 21,
+      "avg_chunk_length": 864,
+      "min_chunk_length": 167,
+      "max_chunk_length": 999
+    },
+    {
+      "pdf_name": "2005.14165",
+      "total_chunks": 335,
+      "text_chunks": 335,
+      "table_chunks": 0,
+      "avg_chunk_length": 772,
+      "min_chunk_length": 14,
+      "max_chunk_length": 997
+    }
+  ]
+}
