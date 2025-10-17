@@ -27,19 +27,19 @@ if __name__ == "__main__":
     pdf_ingest.extract_all_pdfs()
     
     print("\n" + "=" * 80)
-    print("STEP 3: Chunking Text for RAG")
+    print("STEP 3: Agentic Chunking with Qwen/Qwen2.5-1.5B-Instruct")
     print("=" * 80)
     
-    # Step 3: Chunk text and tables
-    chunking.run_semantic_chunking()
+    # Step 3: Chunk text using Qwen/Qwen2.5-1.5B-Instruct
+    chunking.run_chunking()
     
     print("\n" + "=" * 80)
     print("Pipeline completed successfully!")
     print("=" * 80)
     print("\nOutput:")
     print("  PDFs: data/*.pdf")
-    print("  Extracted text: data/extracted_text/")
-    print("  Chunks: data/chunks/")
+    print("  Extracted text: data/extracted_text/*_full_text.txt")
+    print("  Chunks: data/chunks/*_chunks.txt")
     print("\nNext steps:")
     print("  1. Generate embeddings for chunks")
     print("  2. Store in vector database")

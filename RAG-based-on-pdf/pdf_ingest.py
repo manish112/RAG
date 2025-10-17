@@ -5,8 +5,6 @@ import PyPDF2
 from pdfminer.high_level import extract_text as pdfminer_extract_text
 from pdfminer.layout import LAParams
 import pdfplumber
-from pdf2image import convert_from_path
-import pytesseract
 import json
 import warnings
 warnings.filterwarnings('ignore')
@@ -115,11 +113,10 @@ def extract_text_pdfminer(pdf_path):
 def extract_text_pdfplumber(pdf_path):
     """
     Extract text from PDF using pdfplumber with excellent table support.
-    Returns text content and extracted tables.
+    Tables are embedded directly into the text output.
     """
     try:
         text_parts = []
-        all_tables = []
         
         with pdfplumber.open(pdf_path) as pdf:
             num_pages = len(pdf.pages)
@@ -130,24 +127,19 @@ def extract_text_pdfplumber(pdf_path):
                 if page_text:
                     text_parts.append(f"\n--- Page {page_num} ---\n{page_text}")
                 
-                # Extract tables from page
+                # Extract tables from page and embed them in text
                 tables = page.extract_tables()
                 if tables:
                     for table_idx, table in enumerate(tables, start=1):
-                        all_tables.append({
-                            'page': page_num,
-                            'table_number': table_idx,
-                            'data': table
-                        })
-                        # Format table as text
+                        # Format table as text and add to text_parts
                         table_text = format_table_as_text(table, page_num, table_idx)
                         text_parts.append(table_text)
         
         full_text = "\n".join(text_parts)
-        return full_text.strip(), all_tables, num_pages
+        return full_text.strip(), num_pages
     except Exception as e:
         print(f"Error extracting text with pdfplumber from {pdf_path.name}: {str(e)}")
-        return "", [], 0
+        return "", 0
 
 def format_table_as_text(table, page_num, table_num):
     """Format extracted table as readable text"""
@@ -170,34 +162,10 @@ def format_table_as_text(table, page_num, table_num):
     text_parts.append(f"[END TABLE {table_num}]\n")
     return "\n".join(text_parts)
 
-def extract_text_ocr(pdf_path):
-    """
-    Extract text using OCR (pdf2image + pytesseract).
-    This is a fallback method when text extraction fails.
-    """
-    try:
-        print("    - Converting PDF to images for OCR...")
-        # Convert PDF to images
-        images = convert_from_path(str(pdf_path), dpi=300)
-        
-        text_parts = []
-        for page_num, image in enumerate(images, start=1):
-            print(f"      - OCR processing page {page_num}/{len(images)}...")
-            # Perform OCR on the image
-            page_text = pytesseract.image_to_string(image, lang='eng')
-            if page_text.strip():
-                text_parts.append(f"\n--- Page {page_num} (OCR) ---\n{page_text.strip()}")
-        
-        full_text = "\n".join(text_parts)
-        return full_text.strip(), len(images)
-    except Exception as e:
-        print(f"Error extracting text with OCR from {pdf_path.name}: {str(e)}")
-        return "", 0
-
 def extract_and_save_text(pdf_path, output_folder):
     """
-    Extract text from a PDF using ALL methods and store the best result.
-    Methods: pdfplumber, pdfminer.six, and OCR (if needed)
+    Extract text from a PDF using multiple methods and store the best result.
+    Methods: pdfplumber, pdfminer.six, PyPDF2
     
     Args:
         pdf_path: Path to the PDF file
@@ -207,6 +175,17 @@ def extract_and_save_text(pdf_path, output_folder):
         Dictionary with extraction results
     """
     pdf_name = pdf_path.stem
+    output_file = output_folder / f"{pdf_name}_full_text.txt"
+    
+    # Check if text already extracted
+    if output_file.exists():
+        print(f"\nSkipping: {pdf_path.name} (text already extracted)")
+        return {
+            'pdf_name': pdf_name,
+            'skipped': True,
+            'output_file': str(output_file)
+        }
+    
     print(f"\nExtracting text from: {pdf_path.name}")
     
     results = {
@@ -215,7 +194,6 @@ def extract_and_save_text(pdf_path, output_folder):
         'pdfplumber': {},
         'pdfminer': {},
         'pypdf2': {},
-        'ocr': {},
         'extraction_method': None,
         'all_methods_comparison': {}
     }
@@ -226,13 +204,12 @@ def extract_and_save_text(pdf_path, output_folder):
     # Method 1: pdfplumber (best for tables)
     print("  - Method 1: pdfplumber (with table extraction)...")
     try:
-        plumber_text, tables, plumber_pages = extract_text_pdfplumber(pdf_path)
+        plumber_text, plumber_pages = extract_text_pdfplumber(pdf_path)
         num_pages = plumber_pages
         
         results['pdfplumber'] = {
             'num_pages': plumber_pages,
             'text_length': len(plumber_text),
-            'tables_count': len(tables),
             'success': len(plumber_text) > 0
         }
         
@@ -240,10 +217,9 @@ def extract_and_save_text(pdf_path, output_folder):
             extraction_results['pdfplumber'] = {
                 'text': plumber_text,
                 'length': len(plumber_text),
-                'tables': tables,
-                'score': len(plumber_text) + (len(tables) * 500)  # Bonus for tables
+                'score': len(plumber_text)
             }
-            print(f"    ✓ Extracted {len(plumber_text):,} chars, {len(tables)} tables")
+            print(f"    ✓ Extracted {len(plumber_text):,} chars")
         else:
             print(f"    ✗ No text extracted")
     except Exception as e:
@@ -269,7 +245,6 @@ def extract_and_save_text(pdf_path, output_folder):
             extraction_results['pdfminer'] = {
                 'text': pdfminer_text,
                 'length': len(pdfminer_text),
-                'tables': [],
                 'score': len(pdfminer_text)
             }
             print(f"    ✓ Extracted {len(pdfminer_text):,} chars")
@@ -298,7 +273,6 @@ def extract_and_save_text(pdf_path, output_folder):
             extraction_results['pypdf2'] = {
                 'text': pypdf2_text,
                 'length': len(pypdf2_text),
-                'tables': [],
                 'score': len(pypdf2_text)
             }
             print(f"    ✓ Extracted {len(pypdf2_text):,} chars")
@@ -307,38 +281,6 @@ def extract_and_save_text(pdf_path, output_folder):
     except Exception as e:
         print(f"    ✗ Failed: {str(e)}")
         results['pypdf2'] = {'success': False, 'error': str(e)}
-    
-    # Method 4: OCR (only if all other methods failed or got very little text)
-    total_extracted = sum(r['length'] for r in extraction_results.values())
-    if total_extracted < 100:  # Less than 100 characters total - likely needs OCR
-        print("  - Method 4: OCR (pdf2image + pytesseract) - minimal text detected...")
-        print("    ⚠ This may take several minutes...")
-        try:
-            ocr_text, ocr_pages = extract_text_ocr(pdf_path)
-            num_pages = ocr_pages if num_pages == 0 else num_pages
-            
-            results['ocr'] = {
-                'num_pages': ocr_pages,
-                'text_length': len(ocr_text),
-                'success': len(ocr_text) > 0
-            }
-            
-            if len(ocr_text) > 0:
-                extraction_results['ocr'] = {
-                    'text': ocr_text,
-                    'length': len(ocr_text),
-                    'tables': [],
-                    'score': len(ocr_text)
-                }
-                print(f"    ✓ OCR extracted {len(ocr_text):,} chars")
-            else:
-                print("    ✗ OCR: No text extracted")
-        except Exception as e:
-            print(f"    ✗ OCR failed: {str(e)}")
-            results['ocr'] = {'success': False, 'error': str(e)}
-    else:
-        print("  - Method 4: OCR skipped (sufficient text extracted from other methods)")
-        results['ocr'] = {'skipped': True, 'reason': 'sufficient_text_extracted'}
     
     # Compare all methods and select the best one
     if not extraction_results:
@@ -361,25 +303,13 @@ def extract_and_save_text(pdf_path, output_folder):
     }
     
     final_text = best_result['text']
-    tables_extracted = best_result['tables']
     
     print(f"\n  ✓ Selected method: {selected_method} (best score: {best_result['score']:,})")
     
-    # Save extracted text
+    # Save extracted text (with embedded tables if from pdfplumber)
     text_file = output_folder / f"{pdf_name}_full_text.txt"
     with open(text_file, 'w', encoding='utf-8') as f:
         f.write(final_text)
-    
-    # Save tables separately if extracted
-    if tables_extracted:
-        tables_file = output_folder / f"{pdf_name}_tables.json"
-        with open(tables_file, 'w', encoding='utf-8') as f:
-            json.dump({
-                'pdf_name': pdf_name,
-                'tables_count': len(tables_extracted),
-                'tables': tables_extracted
-            }, f, indent=2, ensure_ascii=False)
-        print(f"  ✓ Saved {len(tables_extracted)} tables to: {tables_file.name}")
     
     print(f"  ✓ Extracted {len(final_text):,} characters using {selected_method}")
     print(f"  ✓ Saved to: {text_file.name}")
@@ -415,26 +345,9 @@ def extract_all_pdfs():
         results = extract_and_save_text(pdf_path, output_folder)
         all_results.append(results)
     
-    # Save summary
-    summary_file = output_folder / "extraction_summary.json"
-    with open(summary_file, 'w', encoding='utf-8') as f:
-        json.dump(all_results, f, indent=2)
-    
-    # Calculate statistics
-    total_tables = sum(r.get('pdfplumber', {}).get('tables_count', 0) for r in all_results)
-    method_counts = {}
-    for r in all_results:
-        method = r.get('extraction_method', 'unknown')
-        method_counts[method] = method_counts.get(method, 0) + 1
-    
     print("\n" + "=" * 60)
     print("Extraction Summary:")
     print(f"  Total PDFs processed: {len(all_results)}")
-    print(f"  Total tables extracted: {total_tables}")
-    print(f"\n  Methods used:")
-    for method, count in method_counts.items():
-        print(f"    - {method}: {count} PDFs")
-    print(f"\n  Summary saved to: {summary_file.name}")
     print("=" * 60)
 
 if __name__ == "__main__":
